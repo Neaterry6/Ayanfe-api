@@ -1,214 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AYANFE 🌹💜🦋🥀</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-image: url('https://i.imgur.com/47KnbfN.jpeg'); /* Your image as background */
-      background-size: cover;
-      background-position: center;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .chat-container {
-      width: 700px;
-      background-color: rgba(18, 0, 53, 0.8); /* Adding transparency to the chat container */
-      border: 1px solid #2b2b40;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      display: flex;
-      flex-direction: column;
-      height: 80vh;
-    }
-
-    .chat-header {
-      background-color: rgba(18, 0, 53, 0.9);
-      padding: 20px;
-      border-bottom: 1px solid #2b2b40;
-      text-align: center;
-      color: #fff;
-    }
-
-    .chat-header h2 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: bold;
-      color: #e4e4e7;
-    }
-
-    .chat-messages {
-      padding: 20px;
-      flex-grow: 1;
-      overflow-y: auto;
-      background-color: rgba(14, 3, 36, 0.7); /* Transparent background inside chat */
-      color: #fff;
-      background-image: url('https://i.imgur.com/47KnbfN.jpeg'); /* Background image inside chat */
-      background-size: cover;
-      background-position: center;
-      border-radius: 0 0 10px 10px;
-    }
-
-    .message {
-      margin-bottom: 15px;
-      padding: 10px;
-      border-radius: 10px;
-      word-break: break-word;
-      max-width: 80%;
-      position: relative;
-    }
-
-    .user-message {
-      background-color: #390065;
-      color: #fff;
-      align-self: flex-end;
-      text-align: right;
-      margin-left: auto;
-    }
-
-    .bot-message {
-      background-color: #4b006f;
-      color: #fff;
-      text-align: left;
-    }
-
-    .copy-button {
-      position: absolute;
-      right: -30px;
-      top: 10px;
-      background-color: #ff00ff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      padding: 5px;
-      font-size: 12px;
-    }
-
-    .copy-button:hover {
-      background-color: #d900d9;
-    }
-
-    .chat-input {
-      display: flex;
-      padding: 15px;
-      background-color: rgba(18, 0, 53, 0.9);
-      border-top: 1px solid #2b2b40;
-    }
-
-    #message-input {
-      flex-grow: 1;
-      padding: 10px;
-      border-radius: 10px;
-      background-color: #1b0a43;
-      color: #fff;
-      border: none;
-      font-size: 16px;
-      resize: none;
-      max-height: 100px;
-    }
-
-    #send-button {
-      background-color: #ff00ff;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-
-    #send-button:hover {
-      background-color: #d900d9;
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #57007f;
-      border-radius: 10px;
-    }
-  </style>
-</head>
-<body>
-  <div class="chat-container">
-    <div class="chat-header">
-      <h2>AYANFE 🌹💜🦋🥀🖤</h2>
-    </div>
-    <div class="chat-messages" id="chat-messages">
-      <div class="message bot-message">
-        <span>Hello! How can I assist you today?</span>
-        <button class="copy-button" onclick="copyMessage(this)">Copy</button>
-      </div>
-    </div>
-    <div class="chat-input">
-      <textarea id="message-input" placeholder="Type a message..."></textarea>
-      <button id="send-button">Send</button>
-    </div>
-  </div>
-
-  <script>
-    const messageInput = document.getElementById('message-input');
-    const sendButton = document.getElementById('send-button');
-    const chatMessages = document.getElementById('chat-messages');
-
-    let uid = Math.random().toString(36).substr(2, 9); // Generate a random UID
-
-    sendButton.addEventListener('click', async () => {
-      const message = messageInput.value.trim();
-      if (message) {
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message', 'user-message');
-        messageElement.innerHTML = `<span>${message}</span>`;
-        chatMessages.appendChild(messageElement);
-
-        try {
-          const response = await fetch('/ask', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question: message, uid: uid }),
-          });
-          const data = await response.json();
-          const botMessage = document.createElement('div');
-          botMessage.classList.add('message', 'bot-message');
-          botMessage.innerHTML = `<span>${data.answer}</span><button class="copy-button" onclick="copyMessage(this)">Copy</button>`;
-          chatMessages.appendChild(botMessage);
-
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-        } catch (error) {
-          console.error('Error:', error);
-          const botMessage = document.createElement('div');
-          botMessage.classList.add('message', 'bot-message');
-          botMessage.innerHTML = `<span>Error: Failed to retrieve answer</span><button class="copy-button" onclick="copyMessage(this)">Copy</button>`;
-          chatMessages.appendChild(botMessage);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VANEA ChatBot</title>
+    <style>
+        /* General Styles */
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
         }
 
-        messageInput.value = '';
-      }
-    });
+        /* Login Page Styles */
+        .login-container {
+            display: none;
+            background-color: #222;
+            border-radius: 10px;
+            padding: 20px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
 
-    messageInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        sendButton.click();
-      }
-    });
+        .login-container.active {
+            display: block;
+        }
 
-    function copyMessage(button) {
-      const messageText = button.previousElementSibling.innerText;
-      navigator.clipboard.writeText(messageText).then(() => {
-        alert('Message copied to clipboard');
-      });
-    }
-  </script>
+        .login-container h1 {
+            font-size: 2em;
+            color: #00ff00;
+            margin-bottom: 15px;
+        }
+
+        .login-container input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .login-container button {
+            background-color: #00BCD4;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Chat Page Styles */
+        .container {
+            display: none;
+            background-color: #222;
+            border-radius: 10px;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .container.active {
+            display: block;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            color: #00ff00;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+
+        p {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+
+        .chat-box {
+            background-color: #333;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 80px;
+            overflow-y: auto;
+            max-height: 200px;
+        }
+
+        #user-input {
+            width: calc(100% - 30px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #444;
+            color: #eee;
+        }
+
+        #send-button {
+            background-color: #00BCD4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .status {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: space-evenly;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: #00ff00;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .social-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-container active" id="login-container">
+        <h1>Login to VANEA</h1>
+        <input type="text" id="username" placeholder="Enter your username">
+        <input type="password" id="password" placeholder="Enter your password">
+        <button id="login-button">Login</button>
+    </div>
+
+    <!-- Chat Page -->
+    <div class="container" id="chat-container">
+        <h1>VANEA ChatBot</h1>
+        <p>Experience the next generation of AI conversation</p>
+
+        <div class="buttons">
+            <button>Tell me a joke</button>
+            <button>What can you do?</button>
+            <button>Write a story</button>
+            <button>Technical help</button>
+        </div>
+
+        <div class="chat-box" id="chat-box">
+            <!-- Messages will appear here -->
+        </div>
+
+        <input type="text" id="user-input" placeholder="Type your message...">
+        <button id="send-button">Send</button>
+
+        <div class="status">
+            <span>• Connected as user-16136</span>
+        </div>
+
+        <div class="social-links">
+            <a href="https://www.facebook.com/profile.php?id=100090443419982" target="_blank">Facebook</a>
+            <a href="https://wa.me/2348039896597" target="_blank">WhatsApp</a>
+        </div>
+    </div>
+
+    <script>
+        // Elements
+        const loginContainer = document.getElementById('login-container');
+        const chatContainer = document.getElementById('chat-container');
+        const loginButton = document.getElementById('login-button');
+        const sendButton = document.getElementById('send-button');
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+
+        // Login Logic
+        loginButton.addEventListener('click', () => {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (username && password) {
+                // Show the chat page
+                loginContainer.classList.remove('active');
+                chatContainer.classList.add('active');
+            } else {
+                alert('Please enter your username and password.');
+            }
+        });
+
+        // Chat Logic
+        sendButton.addEventListener('click', () => {
+            const message = userInput.value.trim();
+            if (message) {
+                // Append user's message to chat box
+                const userMessage = document.createElement('div');
+                userMessage.style.color = '#00BCD4';
+                userMessage.textContent = message;
+                chatBox.appendChild(userMessage);
+
+                // Simulate bot response
+                setTimeout(() => {
+                    const botMessage = document.createElement('div');
+                    botMessage.style.color = '#4CAF50';
+                    botMessage.textContent = "This is a bot reply!";
+                    chatBox.appendChild(botMessage);
+                }, 1000);
+
+                userInput.value = '';
+            }
+        });
+    </script>
 </body>
-      </html
+          </html>
