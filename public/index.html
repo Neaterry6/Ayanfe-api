@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VANEA ❣️</title>
+    <title>Vanea ChatBot</title>
     <style>
-        /* General Styles */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -20,10 +19,9 @@
             height: 100vh;
         }
 
-        /* Login Page Styles */
         .login-container {
             display: none;
-            background-color: rgba(34, 34, 34, 0.8);
+            background-color: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
             padding: 20px;
             width: 80%;
@@ -38,7 +36,6 @@
 
         .login-container h1 {
             font-size: 2em;
-            color: #00ff00;
             margin-bottom: 15px;
         }
 
@@ -61,17 +58,16 @@
             cursor: pointer;
         }
 
-        /* Chat Page Styles */
         .chat-container {
             display: none;
-            width: 700px;
-            background-color: rgba(18, 0, 53, 0.8);
-            border: 1px solid #2b2b40;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            display: flex;
             flex-direction: column;
-            height: 80vh;
+            height: 90vh;
+            width: 90%;
+            max-width: 700px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
 
         .chat-container.active {
@@ -79,90 +75,57 @@
         }
 
         .chat-header {
-            background-color: rgba(18, 0, 53, 0.9);
             padding: 20px;
-            border-bottom: 1px solid #2b2b40;
             text-align: center;
             color: #fff;
         }
 
-        .chat-header h2 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: bold;
-            color: #e4e4e7;
-        }
-
         .chat-messages {
-            padding: 20px;
             flex-grow: 1;
             overflow-y: auto;
-            background-color: rgba(14, 3, 36, 0.7);
+            padding: 20px;
             color: #fff;
-            border-radius: 0 0 10px 10px;
         }
 
         .message {
             margin-bottom: 15px;
             padding: 10px;
-            border-radius: 10px;
-            word-break: break-word;
+            border-radius: 5px;
             max-width: 80%;
-            position: relative;
+            word-wrap: break-word;
         }
 
         .user-message {
-            background-color: #390065;
-            color: #fff;
+            background-color: rgba(0, 0, 0, 0.8);
             align-self: flex-end;
-            text-align: right;
-            margin-left: auto;
         }
 
         .bot-message {
-            background-color: #4b006f;
-            color: #fff;
-            text-align: left;
-        }
-
-        .copy-button {
-            position: absolute;
-            right: -30px;
-            top: 10px;
-            background-color: #ff00ff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            padding: 5px;
-            font-size: 12px;
+            background-color: rgba(255, 255, 255, 0.2);
+            align-self: flex-start;
         }
 
         .chat-input {
             display: flex;
             padding: 15px;
-            background-color: rgba(18, 0, 53, 0.9);
-            border-top: 1px solid #2b2b40;
+            background-color: rgba(0, 0, 0, 0.8);
         }
 
         #message-input {
             flex-grow: 1;
             padding: 10px;
-            border-radius: 10px;
-            background-color: #1b0a43;
+            border-radius: 5px;
+            background-color: #333;
             color: #fff;
             border: none;
-            font-size: 16px;
-            resize: none;
-            max-height: 100px;
         }
 
         #send-button {
-            background-color: #ff00ff;
-            color: #fff;
+            background-color: #00BCD4;
+            color: white;
             padding: 10px 20px;
             border: none;
-            border-radius: 10px;
+            border-radius: 5px;
             cursor: pointer;
             margin-left: 10px;
         }
@@ -177,34 +140,28 @@
             text-decoration: none;
             margin: 0 10px;
         }
-
-        .social-links a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
-    <!-- Login Page -->
+    <!-- Login Interface -->
     <div class="login-container active" id="login-container">
         <h1>Login to Vanea</h1>
         <input type="text" id="username" placeholder="Enter your username">
-        <input type="password" id="password" placeholder="Enter your password">
         <button id="login-button">Login</button>
     </div>
 
-    <!-- Chat Page -->
+    <!-- Chat Interface -->
     <div class="chat-container" id="chat-container">
         <div class="chat-header">
-            <h2>VANEA ❣️</h2>
+            <h2>Welcome to Vanea 🌹💜🦋🥀</h2>
         </div>
         <div class="chat-messages" id="chat-messages">
             <div class="message bot-message">
                 <span>Hello! How can I assist you today?</span>
-                <button class="copy-button" onclick="copyMessage(this)">Copy</button>
             </div>
         </div>
         <div class="chat-input">
-            <textarea id="message-input" placeholder="Type a message..."></textarea>
+            <textarea id="message-input" placeholder="Type your message..."></textarea>
             <button id="send-button">Send</button>
         </div>
         <div class="social-links">
@@ -217,18 +174,51 @@
         const loginContainer = document.getElementById('login-container');
         const chatContainer = document.getElementById('chat-container');
         const loginButton = document.getElementById('login-button');
+        const usernameInput = document.getElementById('username');
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
 
-        loginButton.addEventListener('click', () => {
+        // Check if user is already logged in
+        if (localStorage.getItem('isLoggedIn')) {
             loginContainer.classList.remove('active');
             chatContainer.classList.add('active');
+        }
+
+        // Handle Login
+        loginButton.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            if (username) {
+                localStorage.setItem('isLoggedIn', true);
+                loginContainer.classList.remove('active');
+                chatContainer.classList.add('active');
+            } else {
+                alert('Please enter a username!');
+            }
         });
 
-        function copyMessage(button) {
-            const messageText = button.previousElementSibling.innerText;
-            navigator.clipboard.writeText(messageText).then(() => {
-                alert('Message copied to clipboard');
-            });
-        }
+        // Handle Sending Messages
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message) {
+                const userMessage = document.createElement('div');
+                userMessage.classList.add('message', 'user-message');
+                userMessage.innerText = message;
+                chatMessages.appendChild(userMessage);
+
+                // Simulate bot response
+                setTimeout(() => {
+                    const botMessage = document.createElement('div');
+                    botMessage.classList.add('message', 'bot-message');
+                    botMessage.innerText = "I'm here to assist you!";
+                    chatMessages.appendChild(botMessage);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                messageInput.value = '';
+            }
+        });
     </script>
 </body>
     </html>
