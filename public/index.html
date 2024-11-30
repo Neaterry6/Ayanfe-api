@@ -49,7 +49,6 @@
       border: none;
       border-radius: 5px;
       font-size: 16px;
-      color: lightblack;
     }
 
     .btn {
@@ -85,7 +84,7 @@
 
     .user-message {
       background: #1a73e8;
-      color: lightblack;
+      color: #000; /* Changed user message color to black */
       text-align: right;
     }
 
@@ -129,15 +128,30 @@
 
     .chat-input button {
       padding: 10px 20px;
-      background: blue;
+      background: transparent;
       border: none;
-      border-radius: 5px;
       cursor: pointer;
     }
 
     .chat-input button img {
       width: 24px;
       height: 24px;
+    }
+
+    .links {
+      margin-top: 20px;
+    }
+
+    .links a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .links a:hover {
+      color: #00ff00;
     }
   </style>
 </head>
@@ -158,8 +172,15 @@
       <div class="chat-input">
         <input type="text" id="chat-input" placeholder="Type your message..." />
         <button id="send-btn">
-          <img src="https://img.icons8.com/material-outlined/24/ffffff/send.png" alt="Send">
+          <img src="https://img.icons8.com/material-outlined/24/000000/send.png" alt="Send">
         </button>
+      </div>
+
+      <!-- Links Section -->
+      <div class="links">
+        <a href="https://www.facebook.com/profile.php?id=100090443419982" target="_blank">Visit my Facebook Profile</a>
+        <a href="https://wa.me/2348039896597" target="_blank">Contact me on WhatsApp</a>
+        <a href="https://whatsapp.com/channel/0029VaszFrk3LdQLKvzM8B1Y" target="_blank">Follow the VANEA💜🫂&SUPERMAN🌹🦋 channel on WhatsApp</a>
       </div>
     </div>
   </div>
@@ -173,35 +194,43 @@
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
 
-    // Retrieve user credentials from localStorage
-    let uid = localStorage.getItem('uid');
+    let uid = localStorage.getItem('uid'); // Save user ID persistently
     let username = localStorage.getItem('username');
 
-    // Show login page if user is not logged in
+    // Show login screen if not logged in
     if (!uid || !username) {
-      loginContainer.classList.add('active'); // Show login
-      chatContainer.classList.remove('active'); // Hide chat
+      loginContainer.classList.add('active');
+      chatContainer.classList.remove('active'); // Ensure chat is hidden until login
     } else {
-      loginContainer.classList.remove('active'); // Hide login
-      chatContainer.classList.add('active'); // Show chat
+      chatContainer.classList.add('active');
+      loginContainer.classList.remove('active'); // Hide login screen after successful login
     }
 
-    // Handle login action
+    // Handle login
     loginBtn.addEventListener('click', () => {
-      const usernameValue = usernameInput.value.trim(); // Get username input
+      const usernameValue = usernameInput.value.trim();
       if (usernameValue) {
-        uid = Math.random().toString(36).substring(2, 15); // Generate random UID
+        uid = Math.random().toString(36).substring(2, 15); // Generate unique ID
         username = usernameValue;
 
-        localStorage.setItem('uid', uid); // Save UID
-        localStorage.setItem('username', username); // Save username
+        localStorage.setItem('uid', uid);
+        localStorage.setItem('username', username);
 
-        loginContainer.classList.remove('active'); // Hide login
-        chatContainer.classList.add('active'); // Show chat
+        loginContainer.classList.remove('active');
+        chatContainer.classList.add('active');
       }
     });
 
-    // Function to send a message
+    // Copy message to clipboard
+    const copyToClipboard = (text) => {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied to clipboard!');
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    };
+
+    // Send message
     const sendMessage = () => {
       const message = chatInput.value.trim();
       if (!message) return;
@@ -211,23 +240,41 @@
       userMessage.classList.add('message', 'user-message');
       userMessage.textContent = message;
       chatMessages.appendChild(userMessage);
+
       chatInput.value = '';
 
-      // Simulated bot response
-      setTimeout(() => {
-        const botMessage = document.createElement('div');
-        botMessage.classList.add('message', 'bot-message');
-        botMessage.textContent = `You said: "${message}"`;
-        chatMessages.appendChild(botMessage);
-        chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the bottom
-      }, 500);
+      // Send message to server
+      fetch('/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: message, uid }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Append bot response to chat
+          const botMessage = document.createElement('div');
+          botMessage.classList.add('message', 'bot-message');
+          botMessage.textContent = data.answer;
+
+          // Add copy button
+          const copyButton = document.createElement('button');
+          copyButton.classList.add('copy-btn');
+          copyButton.textContent = 'Copy';
+          copyButton.addEventListener('click', () => copyToClipboard(data.answer));
+          botMessage.appendChild(copyButton);
+
+          chatMessages.appendChild(botMessage);
+          chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the bottom
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
     };
 
-    // Event listeners for sending messages
     sendBtn.addEventListener('click', sendMessage);
     chatInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') sendMessage();
     });
   </script>
 </body>
-  </html>
+</html>
