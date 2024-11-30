@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -134,10 +134,10 @@
       cursor: pointer;
     }
 
-    .chat-input button img {
+    .chat-input button svg {
       width: 24px;
       height: 24px;
-      filter: invert(1); /* Invert the color to make it visible on a transparent background */
+      fill: #007bff; /* Blue fill for the SVG */
     }
 
     .links {
@@ -177,7 +177,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 2L10 20L2 10"/>
           </svg>
-          </button>
+        </button>
       </div>
 
       <!-- Links Section -->
@@ -190,8 +190,82 @@
   </div>
 
   <script>
-    // ... (rest of your JavaScript code remains the same)
+    const loginContainer = document.getElementById('login-container');
+    const chatContainer = document.getElementById('chat-container');
+    const loginBtn = document.getElementById('login-btn');
+    const usernameInput = document.getElementById('username');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    //Removed the localStorage check, login screen will always show first.
+    loginContainer.classList.add('active');
+
+
+    loginBtn.addEventListener('click', () => {
+      const usernameValue = usernameInput.value.trim();
+      if (usernameValue) {
+        // Generate unique ID (you might want a more robust method for production)
+        const uid = Math.random().toString(36).substring(2, 15); 
+        localStorage.setItem('uid', uid);
+        localStorage.setItem('username', usernameValue);
+
+        loginContainer.classList.remove('active');
+        chatContainer.classList.add('active');
+      }
+    });
+
+    const copyToClipboard = (text) => {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied to clipboard!');
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    };
+
+    const sendMessage = () => {
+      const message = chatInput.value.trim();
+      if (!message) return;
+
+      const userMessage = document.createElement('div');
+      userMessage.classList.add('message', 'user-message');
+      userMessage.textContent = message;
+      chatMessages.appendChild(userMessage);
+
+      chatInput.value = '';
+
+      // Replace '/ask' with your actual server endpoint
+      fetch('/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: message, uid: localStorage.getItem('uid') }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          const botMessage = document.createElement('div');
+          botMessage.classList.add('message', 'bot-message');
+          botMessage.textContent = data.answer;
+
+          const copyButton = document.createElement('button');
+          copyButton.classList.add('copy-btn');
+          copyButton.textContent = 'Copy';
+          copyButton.addEventListener('click', () => copyToClipboard(data.answer));
+          botMessage.appendChild(copyButton);
+
+          chatMessages.appendChild(botMessage);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    };
+
+    sendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
   </script>
 </body>
 </html>
-``
+```
+
