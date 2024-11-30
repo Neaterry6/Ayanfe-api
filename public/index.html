@@ -84,7 +84,7 @@
 
     .user-message {
       background: #1a73e8;
-      color: #fff;
+      color: #000; /* Changed user message color to black */
       text-align: right;
     }
 
@@ -137,6 +137,22 @@
       width: 24px;
       height: 24px;
     }
+
+    .links {
+      margin-top: 20px;
+    }
+
+    .links a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .links a:hover {
+      color: #00ff00;
+    }
   </style>
 </head>
 <body>
@@ -159,6 +175,13 @@
           <img src="https://img.icons8.com/material-outlined/24/000000/send.png" alt="Send">
         </button>
       </div>
+
+      <!-- Links Section -->
+      <div class="links">
+        <a href="https://www.facebook.com/profile.php?id=100090443419982" target="_blank">Visit my Facebook Profile</a>
+        <a href="https://wa.me/2348039896597" target="_blank">Contact me on WhatsApp</a>
+        <a href="https://whatsapp.com/channel/0029VaszFrk3LdQLKvzM8B1Y" target="_blank">Follow the VANEA💜🫂&SUPERMAN🌹🦋 channel on WhatsApp</a>
+      </div>
     </div>
   </div>
 
@@ -177,8 +200,10 @@
     // Show login screen if not logged in
     if (!uid || !username) {
       loginContainer.classList.add('active');
+      chatContainer.classList.remove('active'); // Ensure chat is hidden until login
     } else {
       chatContainer.classList.add('active');
+      loginContainer.classList.remove('active'); // Hide login screen after successful login
     }
 
     // Handle login
