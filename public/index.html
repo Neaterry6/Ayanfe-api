@@ -200,10 +200,8 @@
     // Show login screen if not logged in
     if (!uid || !username) {
       loginContainer.classList.add('active');
-      chatContainer.classList.remove('active'); // Ensure chat is hidden until login
     } else {
       chatContainer.classList.add('active');
-      loginContainer.classList.remove('active'); // Hide login screen after successful login
     }
 
     // Handle login
