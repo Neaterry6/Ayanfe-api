@@ -3,35 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VANEA ChatBot</title>
+  <title>VANEA AI ❣️🌺</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       background: url('https://i.imgur.com/K4hhnOn.jpeg') no-repeat center center fixed;
       background-size: cover;
     }
 
     .login-container, .chat-container {
       display: none;
-      width: 100%;
+      width: 90%;
       max-width: 400px;
-      margin: auto;
-      margin-top: 10%;
       padding: 20px;
       background: rgba(0, 0, 0, 0.8);
       border-radius: 10px;
       color: #fff;
-      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     }
 
     .login-container.active, .chat-container.active {
-      display: block;
+      display: flex;
+      flex-direction: column;
     }
 
     .input-field {
-      width: 90%;
+      width: 100%;
       padding: 10px;
       margin: 10px 0;
       border: none;
@@ -47,38 +50,27 @@
       border-radius: 5px;
       cursor: pointer;
       font-size: 16px;
+      margin: 5px 0;
     }
 
     .btn:hover {
       background: #00cc00;
     }
 
+    .error-message {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
     .chat-messages {
-      height: 400px;
+      flex-grow: 1;
       overflow-y: auto;
       border: 1px solid #555;
       padding: 10px;
       background: rgba(0, 0, 0, 0.6);
       border-radius: 5px;
       margin-bottom: 20px;
-    }
-
-    .message {
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 5px;
-    }
-
-    .user-message {
-      background: #1a73e8;
-      color: #fff;
-      text-align: right;
-    }
-
-    .bot-message {
-      background: #444;
-      color: #fff;
-      text-align: left;
     }
 
     .chat-input {
@@ -106,17 +98,19 @@
   </style>
 </head>
 <body>
-  <!-- Login Screen -->
+  <!-- Login/Register Screen -->
   <div class="login-container active" id="login-container">
     <h2>Welcome to VANEA</h2>
-    <p>Please log in to continue.</p>
+    <p>Please register or log in to continue.</p>
     <input type="text" id="username" class="input-field" placeholder="Enter your username" />
+    <button class="btn" id="register-btn">Register</button>
     <button class="btn" id="login-btn">Login</button>
+    <p class="error-message" id="error-message"></p>
   </div>
 
   <!-- Chat Screen -->
   <div class="chat-container" id="chat-container">
-    <h2>VANEA ChatBot</h2>
+    <h2>VANEA AI ❣️🌺</h2>
     <div class="chat-messages" id="chat-messages"></div>
     <div class="chat-input">
       <input type="text" id="chat-input" placeholder="Type your message..." />
@@ -127,8 +121,10 @@
   <script>
     const loginContainer = document.getElementById('login-container');
     const chatContainer = document.getElementById('chat-container');
+    const registerBtn = document.getElementById('register-btn');
     const loginBtn = document.getElementById('login-btn');
     const usernameInput = document.getElementById('username');
+    const errorMessage = document.getElementById('error-message');
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
@@ -136,15 +132,14 @@
     let uid = localStorage.getItem('uid'); // Save user ID persistently
     let username = localStorage.getItem('username');
 
-    // Show login screen if not logged in
-    if (!uid || !username) {
-      loginContainer.classList.add('active');
-    } else {
+    // Show chat screen if already logged in
+    if (uid && username) {
+      loginContainer.classList.remove('active');
       chatContainer.classList.add('active');
     }
 
-    // Handle login
-    loginBtn.addEventListener('click', () => {
+    // Handle registration
+    registerBtn.addEventListener('click', () => {
       const usernameValue = usernameInput.value.trim();
       if (usernameValue) {
         uid = Math.random().toString(36).substring(2, 15); // Generate unique ID
@@ -153,8 +148,20 @@
         localStorage.setItem('uid', uid);
         localStorage.setItem('username', username);
 
+        errorMessage.textContent = 'Registration successful! You can now log in.';
+      } else {
+        errorMessage.textContent = 'Please enter a valid username.';
+      }
+    });
+
+    // Handle login
+    loginBtn.addEventListener('click', () => {
+      const usernameValue = usernameInput.value.trim();
+      if (usernameValue === localStorage.getItem('username')) {
         loginContainer.classList.remove('active');
         chatContainer.classList.add('active');
+      } else {
+        errorMessage.textContent = 'Invalid username. Please register first.';
       }
     });
 
@@ -163,7 +170,6 @@
       const message = chatInput.value.trim();
       if (!message) return;
 
-      // Append user message to chat
       const userMessage = document.createElement('div');
       userMessage.classList.add('message', 'user-message');
       userMessage.textContent = message;
@@ -171,7 +177,6 @@
 
       chatInput.value = '';
 
-      // Send message to server
       fetch('/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -179,7 +184,6 @@
       })
         .then(response => response.json())
         .then(data => {
-          // Append bot response to chat
           const botMessage = document.createElement('div');
           botMessage.classList.add('message', 'bot-message');
           botMessage.textContent = data.answer;
@@ -187,9 +191,7 @@
 
           chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll to the bottom
         })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+        .catch(error => console.error('Error:', error));
     };
 
     sendBtn.addEventListener('click', sendMessage);
