@@ -128,7 +128,7 @@
   </div>
 
   <!-- Chat Page -->
-  <div class="chat-container" id="chat-container">
+  <div class="chat-container hidden" id="chat-container">
     <div class="chat-messages" id="chat-messages"></div>
     <div class="chat-input">
       <input type="text" id="chat-input" placeholder="Type your message..." class="input-field">
@@ -150,8 +150,10 @@
 
     // Handle "Continue" button (go to Login Page)
     continueBtn.addEventListener('click', () => {
+      infoPage.classList.remove('visible');
       infoPage.classList.add('hidden');
       loginPage.classList.remove('hidden');
+      loginPage.classList.add('visible');
     });
 
     // Handle Login
@@ -160,8 +162,10 @@
       const password = document.getElementById('password').value.trim();
 
       if (email && password) {
+        loginPage.classList.remove('visible');
         loginPage.classList.add('hidden');
-        chatContainer.style.display = 'flex'; // Show Chat Page
+        chatContainer.classList.remove('hidden');
+        chatContainer.classList.add('visible');
       } else {
         alert('Please fill in all fields!');
       }
@@ -179,7 +183,7 @@
       chatMessages.appendChild(userMessage);
       chatInput.value = '';
 
-      // Send Message to AI (mock example)
+      // Send Message to AI
       fetch('/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
