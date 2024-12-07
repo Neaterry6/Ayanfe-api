@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VANEA 🌺💝</title>
   <style>
-    /* General Styling */
     body {
       margin: 0;
       padding: 0;
@@ -19,7 +18,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f5f5dc; /* Light beige */
+      background-color: #f5f5dc;
       color: #444;
       text-align: center;
       padding: 20px;
@@ -28,7 +27,7 @@
     #info-page button, #info-page a {
       display: inline-block;
       margin: 10px;
-      background-color: #ff69b4; /* Hot Pink */
+      background-color: #ff69b4;
       color: white;
       border: none;
       padding: 10px 20px;
@@ -39,7 +38,40 @@
     }
 
     #info-page button:hover, #info-page a:hover {
-      background-color: #ff1493; /* Deeper Pink */
+      background-color: #ff1493;
+    }
+
+    /* Login Page Styling */
+    #login-page {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      text-align: center;
+    }
+
+    #login-page input {
+      margin: 10px;
+      padding: 10px;
+      width: 70%;
+      border: none;
+      border-radius: 5px;
+    }
+
+    #login-page button {
+      background-color: #32cd32;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #login-page button:hover {
+      background-color: #228b22;
     }
 
     /* Chat Page Styling */
@@ -135,7 +167,16 @@
       <a href="https://www.facebook.com/profile.php?id=100090443419982" target="_blank">Facebook</a>
       <a href="https://wa.me/2348039896597" target="_blank">WhatsApp</a>
     </div>
-    <button id="continue-to-chat">Continue</button>
+    <button id="continue-to-login">Continue</button>
+  </div>
+
+  <!-- Login Page -->
+  <div id="login-page">
+    <h2>Login or Sign Up</h2>
+    <input type="text" id="username" placeholder="Enter your username" required />
+    <input type="password" id="password" placeholder="Enter your password" required />
+    <button id="login-btn">Login</button>
+    <p>Don't have an account? <span id="signup-link" style="cursor: pointer; text-decoration: underline;">Sign Up</span></p>
   </div>
 
   <!-- Chat Page -->
@@ -150,16 +191,32 @@
 
   <script>
     const infoPage = document.getElementById('info-page');
+    const loginPage = document.getElementById('login-page');
     const chatPage = document.getElementById('chat-page');
-    const continueToChat = document.getElementById('continue-to-chat');
+    const continueToLogin = document.getElementById('continue-to-login');
+    const loginBtn = document.getElementById('login-btn');
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
 
-    // Switch from Info Page to Chat Page
-    continueToChat.addEventListener('click', () => {
+    // Navigate from Info Page to Login Page
+    continueToLogin.addEventListener('click', () => {
       infoPage.style.display = 'none';
-      chatPage.style.display = 'block';
+      loginPage.style.display = 'flex';
+    });
+
+    // Login and navigate to Chat Page
+    loginBtn.addEventListener('click', () => {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (username && password) {
+        alert('Login successful!'); // Placeholder login check
+        loginPage.style.display = 'none';
+        chatPage.style.display = 'block';
+      } else {
+        alert('Please fill in both fields.');
+      }
     });
 
     // Send Message
@@ -200,4 +257,4 @@
     }
   </script>
 </body>
-</html>
+      </html>
