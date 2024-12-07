@@ -46,43 +46,40 @@
     }
 
     .info-container, .login-container, .chat-container {
-      width: 100%;
-      height: 100vh;
+      width: 600px;
       padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .info-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
       text-align: center;
     }
 
-    /* Chat Container */
-    .chat-container {
-      background-image: url('https://i.ibb.co/jrgP4CM/image.jpg');
-      background-size: cover;
-      background-position: center;
+    .tabs {
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: absolute;
-      top: 0;
-      left: 0;
-      display: none;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab.active {
+      border-color: #ff4081;
+    }
+
+    .chat-header img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 20px;
     }
 
     .chat-messages {
-      max-height: calc(100vh - 120px);
+      max-height: 400px;
       overflow-y: auto;
       margin-bottom: 10px;
-    }
-
-    .chat-input {
-      display: flex;
-      margin-top: 10px;
     }
 
     .message {
@@ -120,81 +117,69 @@
   <!-- Login Page -->
   <div class="login-container hidden" id="login-container">
     <h2>Login to VANEA 🌺💝</h2>
+    <div class="tabs">
+      <div class="tab active" id="login-tab">Login</div>
+      <div class="tab" id="signup-tab">Sign Up</div>
+    </div>
     <div id="login-content">
       <input type="email" id="email" class="input-field" placeholder="Enter your email" />
       <input type="password" id="password" class="input-field" placeholder="Enter your password" />
       <button class="btn" id="login-btn">Login</button>
     </div>
+    <div id="signup-content" class="hidden">
+      <input type="email" id="newEmail" class="input-field" placeholder="Enter your email" />
+      <input type="password" id="newPassword" class="input-field" placeholder="Enter your password" />
+      <button class="btn" id="signup-btn">Sign Up</button>
+    </div>
   </div>
 
   <!-- Chat Page -->
-  <div class="chat-container" id="chat-container">
-    <h2>VANEA Chat</h2>
+  <div class="chat-container hidden" id="chat-container">
+    <div class="chat-header">
+      <img src="https://i.ibb.co/jrgP4CM/image.jpg" alt="Chat Image">
+    </div>
+    <h2>VANEA🌺💝</h2>
     <div class="chat-messages" id="chat-messages"></div>
     <div class="chat-input">
       <input type="text" id="chat-input" placeholder="Type your message..." class="input-field" />
       <button class="btn" id="send-btn">Send</button>
     </div>
-    <button class="btn" id="logout-btn" style="margin: 10px;">Logout</button>
   </div>
 
   <script>
     const infoContainer = document.getElementById('info-container');
-    const continueBtn = document.getElementById('continue-btn');
     const loginContainer = document.getElementById('login-container');
     const chatContainer = document.getElementById('chat-container');
-    const loginBtn = document.getElementById('login-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
+    const continueBtn = document.getElementById('continue-btn');
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
-
-    // Dummy user credentials for simplicity
-    const user = { email: "test@example.com", password: "password" };
 
     continueBtn.addEventListener('click', () => {
       infoContainer.classList.add('hidden');
       loginContainer.classList.remove('hidden');
     });
 
-    loginBtn.addEventListener('click', () => {
-      const emailValue = emailInput.value.trim();
-      const passwordValue = passwordInput.value.trim();
+    const addMessage = (message, isUser) => {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
+      messageDiv.textContent = message;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
 
-      if (emailValue === user.email && passwordValue === user.password) {
-        alert('Login successful!');
-        loginContainer.classList.add('hidden');
-        chatContainer.style.display = 'flex';
-      } else {
-        alert('Invalid email or password');
-      }
-    });
-
-    sendBtn.addEventListener('click', () => {
+    const sendMessage = () => {
       const message = chatInput.value.trim();
       if (!message) return;
 
-      const userMessage = document.createElement('div');
-      userMessage.classList.add('message', 'user-message');
-      userMessage.textContent = message;
-      chatMessages.appendChild(userMessage);
+      addMessage(message, true);
       chatInput.value = '';
+      setTimeout(() => addMessage("This is a bot response.", false), 1000);
+    };
 
-      // Simulate bot response
-      setTimeout(() => {
-        const botMessage = document.createElement('div');
-        botMessage.classList.add('message', 'bot-message');
-        botMessage.textContent = "Bot: " + message;
-        chatMessages.appendChild(botMessage);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, 1000);
-    });
-
-    logoutBtn.addEventListener('click', () => {
-      chatContainer.style.display = 'none';
-      loginContainer.classList.remove('hidden');
+    sendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
     });
   </script>
 </body>
