@@ -11,11 +11,10 @@
       margin: 0;
       padding: 0;
       background-color: #f0f0f0;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
     }
 
     .hidden {
@@ -33,68 +32,43 @@
       text-align: center;
       padding: 20px;
       background-color: #fff;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     .btn {
       background-color: #ff4081;
-      border: none;
       color: white;
+      border: none;
       padding: 10px 20px;
-      cursor: pointer;
-      font-size: 16px;
       border-radius: 5px;
-      margin-top: 20px;
-    }
-
-    .btn:hover {
-      background-color: #e535ab;
+      cursor: pointer;
+      margin-top: 10px;
     }
 
     .input-field {
-      padding: 10px;
       width: 100%;
+      padding: 10px;
       margin: 10px 0;
       border-radius: 5px;
       border: 1px solid #ccc;
     }
 
-    .tabs {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
-    }
-
-    .tab {
-      padding: 10px;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-    }
-
-    .tab.active {
-      border-color: #ff4081;
-    }
-
     /* Chat Page */
     .chat-container {
-      display: none;
-      height: 100%;
       width: 100%;
+      height: 100%;
       position: absolute;
       top: 0;
       left: 0;
-      background-image: url('https://i.ibb.co/jrgP4CM/image.jpg');
-      background-size: cover;
-      background-position: center;
+      background-color: #f0f0f0;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
     }
 
     .chat-messages {
       flex: 1;
-      padding: 10px;
+      padding: 20px;
       overflow-y: auto;
     }
 
@@ -104,8 +78,8 @@
     }
 
     .message {
+      margin: 5px 0;
       padding: 10px;
-      margin: 5px;
       border-radius: 5px;
     }
 
@@ -130,98 +104,62 @@
     <button class="btn" id="continue-btn">Continue</button>
   </div>
 
-  <!-- Login & Sign Up Page -->
+  <!-- Login/Sign-Up Page -->
   <div class="container hidden" id="login-page">
-    <h2>Login to VANEA 🌺💝</h2>
-    <div class="tabs">
-      <div class="tab active" id="login-tab">Login</div>
-      <div class="tab" id="signup-tab">Sign Up</div>
-    </div>
-
-    <!-- Login Form -->
-    <div id="login-content">
-      <input type="email" id="email" class="input-field" placeholder="Enter your email">
-      <input type="password" id="password" class="input-field" placeholder="Enter your password">
-      <button class="btn" id="login-btn">Login</button>
-    </div>
-
-    <!-- Sign Up Form -->
-    <div id="signup-content" class="hidden">
-      <input type="email" id="newEmail" class="input-field" placeholder="Enter your email">
-      <input type="password" id="newPassword" class="input-field" placeholder="Enter your password">
-      <button class="btn" id="signup-btn">Sign Up</button>
-    </div>
+    <h2>Login or Sign Up</h2>
+    <input type="email" id="email" class="input-field" placeholder="Enter your email">
+    <input type="password" id="password" class="input-field" placeholder="Enter your password">
+    <button class="btn" id="login-btn">Login</button>
+    <button class="btn" id="signup-btn">Sign Up</button>
   </div>
 
   <!-- Chat Page -->
   <div class="chat-container hidden" id="chat-container">
     <div class="chat-messages" id="chat-messages"></div>
     <div class="chat-input">
-      <input type="text" id="chat-input" placeholder="Type your message..." class="input-field">
+      <input type="text" id="chat-input" class="input-field" placeholder="Type your message...">
       <button class="btn" id="send-btn">Send</button>
     </div>
   </div>
 
   <script>
-    // References to DOM elements
     const infoPage = document.getElementById('info-page');
     const loginPage = document.getElementById('login-page');
     const chatContainer = document.getElementById('chat-container');
-
     const continueBtn = document.getElementById('continue-btn');
-    const loginTab = document.getElementById('login-tab');
-    const signupTab = document.getElementById('signup-tab');
-    const loginContent = document.getElementById('login-content');
-    const signupContent = document.getElementById('signup-content');
-
     const loginBtn = document.getElementById('login-btn');
     const signupBtn = document.getElementById('signup-btn');
+    const sendBtn = document.getElementById('send-btn');
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
-    const sendBtn = document.getElementById('send-btn');
 
-    // Handle "Continue" button (go to Login Page)
+    // Simulate a database with localStorage
+    const users = JSON.parse(localStorage.getItem('users')) || {};
+
+    // Navigate to login page
     continueBtn.addEventListener('click', () => {
       infoPage.classList.add('hidden');
       loginPage.classList.remove('hidden');
     });
 
-    // Tab Switching
-    loginTab.addEventListener('click', () => {
-      loginTab.classList.add('active');
-      signupTab.classList.remove('active');
-      loginContent.classList.remove('hidden');
-      signupContent.classList.add('hidden');
-    });
-
-    signupTab.addEventListener('click', () => {
-      signupTab.classList.add('active');
-      loginTab.classList.remove('active');
-      signupContent.classList.remove('hidden');
-      loginContent.classList.add('hidden');
-    });
-
-    // Handle Sign Up
+    // Sign up logic
     signupBtn.addEventListener('click', () => {
-      const email = document.getElementById('newEmail').value.trim();
-      const password = document.getElementById('newPassword').value.trim();
-
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
       if (email && password) {
-        localStorage.setItem('user', JSON.stringify({ email, password }));
-        alert('Sign Up successful! You can now log in.');
-        signupTab.click(); // Switch back to Login tab
+        users[email] = password;
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Sign up successful! You can now log in.');
       } else {
         alert('Please fill in all fields!');
       }
     });
 
-    // Handle Login
+    // Login logic
     loginBtn.addEventListener('click', () => {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
-      const user = JSON.parse(localStorage.getItem('user'));
-
-      if (user && user.email === email && user.password === password) {
+      if (users[email] && users[email] === password) {
         alert('Login successful!');
         loginPage.classList.add('hidden');
         chatContainer.classList.remove('hidden');
@@ -230,26 +168,27 @@
       }
     });
 
-    // Handle Chat Message Send
+    // Chat functionality
     sendBtn.addEventListener('click', () => {
-      const message = chatInput.value.trim();
-      if (!message) return;
+      const userMessage = chatInput.value.trim();
+      if (!userMessage) return;
 
-      // Display User Message
-      const userMessage = document.createElement('div');
-      userMessage.classList.add('message', 'user-message');
-      userMessage.textContent = message;
-      chatMessages.appendChild(userMessage);
-      chatInput.value = '';
+      // Display user message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'message user-message';
+      userDiv.textContent = userMessage;
+      chatMessages.appendChild(userDiv);
 
-      // Simulate AI Bot Response
+      // Simulate bot response
       setTimeout(() => {
-        const botMessage = document.createElement('div');
-        botMessage.classList.add('message', 'bot-message');
-        botMessage.textContent = "I'm here to help!";
-        chatMessages.appendChild(botMessage);
+        const botDiv = document.createElement('div');
+        botDiv.className = 'message bot-message';
+        botDiv.textContent = 'This is a response from VANEA!';
+        chatMessages.appendChild(botDiv);
       }, 1000);
+
+      chatInput.value = '';
     });
   </script>
 </body>
-  </html>
+</html>
