@@ -231,24 +231,43 @@
 
     // Handle sending a message
     sendBtn.addEventListener('click', async () => {
-      const userMessageText = chatInput.value.trim();
-      if (!userMessageText) return;
+  const userMessageText = chatInput.value.trim();
+  if (!userMessageText) return;
 
-      // Display user's message
-      const userMessage = document.createElement('div');
-      userMessage.classList.add('message', 'user-message');
-      userMessage.textContent = userMessageText;
-      chatMessages.appendChild(userMessage);
+  // Display user's message
+  const userMessage = document.createElement('div');
+  userMessage.classList.add('message', 'user-message');
+  userMessage.textContent = userMessageText;
+  chatMessages.appendChild(userMessage);
 
-      // Clear input field
-      chatInput.value = '';
+  // Clear input field
+  chatInput.value = '';
 
-      // Mocking bot's response
+  // Send the message to the server
+  try {
+    const response = await fetch('/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: userMessageText,
+        uid: 'user123', // Replace with dynamic UID if available
+      }),
+    });
+
+    const data = await response.json();
+    if (data.answer) {
+      // Display bot's response
       const botMessage = document.createElement('div');
       botMessage.classList.add('message', 'bot-message');
-      botMessage.textContent = 'Bot response goes here!';
+      botMessage.textContent = data.answer;
       chatMessages.appendChild(botMessage);
-    });
+    } else {
+      console.error('No response from the server');
+    }
+  } catch (error) {
+    console.error('Error sending message:', error);
+  }
+ });
   </script>
 </body>
   </html>
