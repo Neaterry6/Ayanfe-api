@@ -3,258 +3,266 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VANEA 🌺💝</title>
+  <title>VANEA🌺💝</title>
   <style>
+    /* General styles */
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    /* Info Page Styling */
-    #info-page {
+      background-color: #f0f0f0;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f5f5dc;
-      color: #444;
-      text-align: center;
-      padding: 20px;
+      flex-direction: column;
     }
 
-    #info-page button, #info-page a {
-      display: inline-block;
-      margin: 10px;
-      background-color: #ff69b4;
-      color: white;
+    .btn {
+      background-color: #ff4081;
       border: none;
+      color: white;
       padding: 10px 20px;
+      cursor: pointer;
       font-size: 16px;
       border-radius: 5px;
-      text-decoration: none;
-      cursor: pointer;
+      margin-top: 20px;
     }
 
-    #info-page button:hover, #info-page a:hover {
-      background-color: #ff1493;
+    .btn:hover {
+      background-color: #e535ab;
     }
 
-    /* Login Page Styling */
-    #login-page {
+    .input-field {
+      padding: 10px;
+      width: 100%;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .active {
+      display: block;
+    }
+
+    .hidden {
       display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.9);
-      color: white;
+    }
+
+    .info-container {
       text-align: center;
     }
 
-    #login-page input {
-      margin: 10px;
-      padding: 10px;
-      width: 70%;
-      border: none;
-      border-radius: 5px;
-    }
-
-    #login-page button {
-      background-color: #32cd32;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #login-page button:hover {
-      background-color: #228b22;
-    }
-
-    /* Chat Page Styling */
-    #chat-page {
+    .login-container, .chat-container {
+      width: 400px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
       display: none;
-      height: 100vh;
-      background: url('https://i.ibb.co/fD1ts8p/image.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-      text-align: center;
     }
 
-    #chat-messages {
-      height: 70vh;
-      overflow-y: auto;
-      padding: 10px;
-      margin: 10px;
-      border: 1px solid #ddd;
-      background-color: rgba(255, 255, 255, 0.8);
-      border-radius: 5px;
-    }
-
-    .message-container {
+    .tabs {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 5px 0;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab.active {
+      border-color: #ff4081;
     }
 
     .message {
-      flex-grow: 1;
       padding: 10px;
-      background-color: #e6e6fa;
+      margin: 5px;
       border-radius: 5px;
-      text-align: left;
+    }
+
+    .user-message {
+      background-color: #ff4081;
+      color: white;
+      align-self: flex-end;
+    }
+
+    .bot-message {
+      background-color: #ccc;
+      color: black;
+      align-self: flex-start;
+      position: relative;
+    }
+
+    .chat-messages {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 10px;
     }
 
     .copy-btn {
-      margin-left: 10px;
-      background-color: #00bfff;
-      color: #fff;
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      background-color: transparent;
       border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
+      color: #ff4081;
       cursor: pointer;
-    }
-
-    .copy-btn:hover {
-      background-color: #1e90ff;
-    }
-
-    #chat-input-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 10px;
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-
-    #chat-input {
-      width: 70%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      margin-right: 10px;
-    }
-
-    #send-btn {
-      background-color: #32cd32;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #send-btn:hover {
-      background-color: #228b22;
     }
   </style>
 </head>
 <body>
   <!-- Info Page -->
-  <div id="info-page">
-    <h1>Welcome to VANEA 🌺💝</h1>
-    <p>
-      Hi, I'm VANEA!<br>
-      I am a passionate developer, designer, and tech enthusiast.<br>
-      Let's create something amazing together!
-    </p>
+  <div class="info-container" id="info-container">
+    <h1>Welcome to VANEA🌺💝</h1>
+    <p>Hi, I'm VANEA! I'm a developer, designer, and tech enthusiast.</p>
     <div>
-      <a href="https://www.youtube.com/@AkewusholaAbdulbakri" target="_blank">YouTube</a>
-      <a href="https://www.facebook.com/profile.php?id=100090443419982" target="_blank">Facebook</a>
-      <a href="https://wa.me/2348039896597" target="_blank">WhatsApp</a>
+      <a href="https://www.youtube.com/@AkewusholaAbdulbakri" target="_blank" class="btn">YouTube</a>
+      <a href="https://www.facebook.com/profile.php?id=100090443419982" target="_blank" class="btn">Facebook</a>
+      <a href="https://was.me/2348039896597" target="_blank" class="btn">WhatsApp</a>
     </div>
-    <button id="continue-to-login">Continue</button>
+    <button class="btn" id="continue-btn">Continue</button>
   </div>
 
   <!-- Login Page -->
-  <div id="login-page">
-    <h2>Login or Sign Up</h2>
-    <input type="text" id="username" placeholder="Enter your username" required />
-    <input type="password" id="password" placeholder="Enter your password" required />
-    <button id="login-btn">Login</button>
-    <p>Don't have an account? <span id="signup-link" style="cursor: pointer; text-decoration: underline;">Sign Up</span></p>
+  <div class="login-container" id="login-container">
+    <h2>Login to VANEA 🌺💝</h2>
+    <div class="tabs">
+      <div class="tab active" id="login-tab">Login</div>
+      <div class="tab" id="signup-tab">Sign Up</div>
+    </div>
+    <div id="login-content">
+      <input type="email" id="email" class="input-field" placeholder="Enter your email" />
+      <input type="password" id="password" class="input-field" placeholder="Enter your password" />
+      <button class="btn" id="login-btn">Login</button>
+    </div>
+    <div id="signup-content" class="hidden">
+      <input type="email" id="newEmail" class="input-field" placeholder="Enter your email" />
+      <input type="password" id="newPassword" class="input-field" placeholder="Enter your password" />
+      <button class="btn" id="signup-btn">Sign Up</button>
+    </div>
   </div>
 
   <!-- Chat Page -->
-  <div id="chat-page">
-    <h2>Chat with VANEA 🌺💝</h2>
-    <div id="chat-messages"></div>
-    <div id="chat-input-container">
-      <input type="text" id="chat-input" placeholder="Type your message here" />
-      <button id="send-btn">Send</button>
+  <div class="chat-container" id="chat-container">
+    <h2>VANEA🌺💝</h2>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input">
+      <input type="text" id="chat-input" placeholder="Type your message..." class="input-field"/>
+      <button class="btn" id="send-btn">Send</button>
     </div>
   </div>
 
   <script>
-    const infoPage = document.getElementById('info-page');
-    const loginPage = document.getElementById('login-page');
-    const chatPage = document.getElementById('chat-page');
-    const continueToLogin = document.getElementById('continue-to-login');
+    const infoContainer = document.getElementById('info-container');
+    const continueBtn = document.getElementById('continue-btn');
+    const loginContainer = document.getElementById('login-container');
+    const chatContainer = document.getElementById('chat-container');
     const loginBtn = document.getElementById('login-btn');
+    const signupBtn = document.getElementById('signup-btn');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const newEmailInput = document.getElementById('newEmail');
+    const newPasswordInput = document.getElementById('newPassword');
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
+    const loginTab = document.getElementById('login-tab');
+    const signupTab = document.getElementById('signup-tab');
+    const loginContent = document.getElementById('login-content');
+    const signupContent = document.getElementById('signup-content');
 
-    // Navigate from Info Page to Login Page
-    continueToLogin.addEventListener('click', () => {
-      infoPage.style.display = 'none';
-      loginPage.style.display = 'flex';
+    continueBtn.addEventListener('click', () => {
+      infoContainer.style.display = 'none';
+      loginContainer.style.display = 'block';
     });
 
-    // Login and navigate to Chat Page
-    loginBtn.addEventListener('click', () => {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+    loginTab.addEventListener('click', () => {
+      loginTab.classList.add('active');
+      signupTab.classList.remove('active');
+      loginContent.style.display = 'block';
+      signupContent.style.display = 'none';
+    });
 
-      if (username && password) {
-        alert('Login successful!'); // Placeholder login check
-        loginPage.style.display = 'none';
-        chatPage.style.display = 'block';
+    signupTab.addEventListener('click', () => {
+      signupTab.classList.add('active');
+      loginTab.classList.remove('active');
+      signupContent.style.display = 'block';
+      loginContent.style.display = 'none';
+    });
+
+    signupBtn.addEventListener('click', () => {
+      const newEmailValue = newEmailInput.value.trim();
+      const newPasswordValue = newPasswordInput.value.trim();
+      if (newEmailValue && newPasswordValue) {
+        localStorage.setItem('user', JSON.stringify({ email: newEmailValue, password: newPasswordValue }));
+        alert('Sign Up successful!');
+        loginContainer.style.display = 'none';
+        chatContainer.style.display = 'block';
       } else {
-        alert('Please fill in both fields.');
+        alert('Please fill in all fields');
       }
     });
 
-    // Send Message
-    sendBtn.addEventListener('click', sendMessage);
-    chatInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendMessage();
+    loginBtn.addEventListener('click', () => {
+      const emailValue = emailInput.value.trim();
+      const passwordValue = passwordInput.value.trim();
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      if (storedUser && storedUser.email === emailValue && storedUser.password === passwordValue) {
+        alert('Login successful!');
+        loginContainer.style.display = 'none';
+        chatContainer.style.display = 'block';
+      } else {
+        alert('Invalid email or password');
+      }
     });
 
-    function sendMessage() {
-      const messageText = chatInput.value.trim();
-      if (!messageText) return;
+    sendBtn.addEventListener('click', () => {
+      const message = chatInput.value.trim();
+      if (!message) return;
+      const userMessage = document.createElement('div');
+      userMessage.classList.add('message', 'user-message');
+      userMessage.textContent = message;
+      chatMessages.appendChild(userMessage);
 
-      // Create message container
-      const messageContainer = document.createElement('div');
-      messageContainer.className = 'message-container';
-
-      // Create message element
-      const message = document.createElement('div');
-      message.className = 'message';
-      message.textContent = messageText;
-
-      // Create copy button
-      const copyBtn = document.createElement('button');
-      copyBtn.className = 'copy-btn';
-      copyBtn.textContent = 'Copy';
-      copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(messageText);
-        alert('Message copied to clipboard!');
-      });
-
-      // Append elements
-      messageContainer.appendChild(message);
-      messageContainer.appendChild(copyBtn);
-      chatMessages.appendChild(messageContainer);
-
-      // Clear chat input
+      // Clear the input field after sending
       chatInput.value = '';
-    }
+
+      // Bot reply from app.js (simulate bot response here)
+      const botMessage = document.createElement('div');
+      botMessage.classList.add('message', 'bot-message');
+      botMessage.textContent = "I'm here to help!"; // Replace with your app.js logic
+      chatMessages.appendChild(botMessage);
+
+      // Add a copy button to the bot message
+        const copyButton = document.createElement('button');
+        copyButton.classList.add('copy-btn');
+        copyButton.textContent = 'Copy';
+        copyButton.addEventListener('click', () => {
+          navigator.clipboard.writeText(botMessage.textContent).then(() => {
+            alert('Message copied to clipboard!');
+          }).catch(err => {
+            console.error('Failed to copy text: ', err);
+          });
+        });
+        botMessage.appendChild(copyButton); // Append the copy button to the bot message
+    });
+
+    // Disable send button when message input is empty
+    chatInput.addEventListener('input', () => {
+      if (chatInput.value.trim() === '') {
+        sendBtn.disabled = true;
+      } else {
+        sendBtn.disabled = false;
+      }
+    });
+
+    // Initially disable the button
+    sendBtn.disabled = true;
   </script>
 </body>
-      </html>
+        </html>
