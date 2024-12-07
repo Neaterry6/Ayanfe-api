@@ -60,6 +60,22 @@
       border: 1px solid #ccc;
     }
 
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab.active {
+      border-color: #ff4081;
+    }
+
     /* Chat Page */
     .chat-container {
       display: none;
@@ -111,20 +127,30 @@
   <div class="container visible" id="info-page">
     <h1>Welcome to VANEA🌺💝</h1>
     <p>Hi, I'm VANEA! I'm a developer, designer, and tech enthusiast.</p>
-    <div>
-      <a href="https://www.youtube.com/@AkewusholaAbdulbakri" target="_blank" class="btn">YouTube</a>
-      <a href="https://www.facebook.com/profile.php?id=100090443419982" target="_blank" class="btn">Facebook</a>
-      <a href="https://was.me/2348039896597" target="_blank" class="btn">WhatsApp</a>
-    </div>
     <button class="btn" id="continue-btn">Continue</button>
   </div>
 
-  <!-- Login Page -->
+  <!-- Login & Sign Up Page -->
   <div class="container hidden" id="login-page">
     <h2>Login to VANEA 🌺💝</h2>
-    <input type="email" id="email" class="input-field" placeholder="Enter your email">
-    <input type="password" id="password" class="input-field" placeholder="Enter your password">
-    <button class="btn" id="login-btn">Login</button>
+    <div class="tabs">
+      <div class="tab active" id="login-tab">Login</div>
+      <div class="tab" id="signup-tab">Sign Up</div>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login-content">
+      <input type="email" id="email" class="input-field" placeholder="Enter your email">
+      <input type="password" id="password" class="input-field" placeholder="Enter your password">
+      <button class="btn" id="login-btn">Login</button>
+    </div>
+
+    <!-- Sign Up Form -->
+    <div id="signup-content" class="hidden">
+      <input type="email" id="newEmail" class="input-field" placeholder="Enter your email">
+      <input type="password" id="newPassword" class="input-field" placeholder="Enter your password">
+      <button class="btn" id="signup-btn">Sign Up</button>
+    </div>
   </div>
 
   <!-- Chat Page -->
@@ -143,31 +169,64 @@
     const chatContainer = document.getElementById('chat-container');
 
     const continueBtn = document.getElementById('continue-btn');
+    const loginTab = document.getElementById('login-tab');
+    const signupTab = document.getElementById('signup-tab');
+    const loginContent = document.getElementById('login-content');
+    const signupContent = document.getElementById('signup-content');
+
     const loginBtn = document.getElementById('login-btn');
-    const sendBtn = document.getElementById('send-btn');
+    const signupBtn = document.getElementById('signup-btn');
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
 
     // Handle "Continue" button (go to Login Page)
     continueBtn.addEventListener('click', () => {
-      infoPage.classList.remove('visible');
       infoPage.classList.add('hidden');
       loginPage.classList.remove('hidden');
-      loginPage.classList.add('visible');
+    });
+
+    // Tab Switching
+    loginTab.addEventListener('click', () => {
+      loginTab.classList.add('active');
+      signupTab.classList.remove('active');
+      loginContent.classList.remove('hidden');
+      signupContent.classList.add('hidden');
+    });
+
+    signupTab.addEventListener('click', () => {
+      signupTab.classList.add('active');
+      loginTab.classList.remove('active');
+      signupContent.classList.remove('hidden');
+      loginContent.classList.add('hidden');
+    });
+
+    // Handle Sign Up
+    signupBtn.addEventListener('click', () => {
+      const email = document.getElementById('newEmail').value.trim();
+      const password = document.getElementById('newPassword').value.trim();
+
+      if (email && password) {
+        localStorage.setItem('user', JSON.stringify({ email, password }));
+        alert('Sign Up successful! You can now log in.');
+        signupTab.click(); // Switch back to Login tab
+      } else {
+        alert('Please fill in all fields!');
+      }
     });
 
     // Handle Login
     loginBtn.addEventListener('click', () => {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
+      const user = JSON.parse(localStorage.getItem('user'));
 
-      if (email && password) {
-        loginPage.classList.remove('visible');
+      if (user && user.email === email && user.password === password) {
+        alert('Login successful!');
         loginPage.classList.add('hidden');
         chatContainer.classList.remove('hidden');
-        chatContainer.classList.add('visible');
       } else {
-        alert('Please fill in all fields!');
+        alert('Invalid email or password!');
       }
     });
 
@@ -183,24 +242,14 @@
       chatMessages.appendChild(userMessage);
       chatInput.value = '';
 
-      // Send Message to AI
-      fetch('/ask', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: message })
-      })
-        .then(response => response.json())
-        .then(data => {
-          // Display Bot Response
-          const botMessage = document.createElement('div');
-          botMessage.classList.add('message', 'bot-message');
-          botMessage.textContent = data.answer || 'Sorry, I didn’t understand that.';
-          chatMessages.appendChild(botMessage);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+      // Simulate AI Bot Response
+      setTimeout(() => {
+        const botMessage = document.createElement('div');
+        botMessage.classList.add('message', 'bot-message');
+        botMessage.textContent = "I'm here to help!";
+        chatMessages.appendChild(botMessage);
+      }, 1000);
     });
   </script>
 </body>
-</html>
+  </html>
