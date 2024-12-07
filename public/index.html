@@ -3,224 +3,211 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VANEA🌺💝</title>
+  <title>VANEA 🌺💝</title>
   <style>
-    /* General styles */
+    /* General Styling */
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    /* Info Page Styling */
+    #info-page {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      flex-direction: column;
-    }
-
-    .btn {
-      background-color: #ff4081;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 16px;
-      border-radius: 5px;
-      margin-top: 20px;
-    }
-
-    .btn:hover {
-      background-color: #e535ab;
-    }
-
-    .input-field {
-      padding: 10px;
-      width: 100%;
-      margin: 10px 0;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-
-    .active {
-      display: block;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .info-container {
+      background-color: #f5f5dc; /* Light beige */
+      color: #444;
       text-align: center;
     }
 
-    .login-container, .chat-container {
-      width: 400px;
-      padding: 20px;
-      background-color: #fff;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      display: none;
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
-    }
-
-    .tab {
-      padding: 10px;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-    }
-
-    .tab.active {
-      border-color: #ff4081;
-    }
-
-    .message {
-      padding: 10px;
-      margin: 5px;
-      border-radius: 5px;
-    }
-
-    .user-message {
-      background-color: #ff4081;
+    #info-page button {
+      background-color: #ff69b4; /* Hot Pink */
       color: white;
-      align-self: flex-end;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
     }
 
-    .bot-message {
-      background-color: #ccc;
+    #info-page button:hover {
+      background-color: #ff1493; /* Deeper Pink */
+    }
+
+    /* Login Page Styling */
+    #login-page {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      background: linear-gradient(to bottom right, #000428, #004e92);
+      color: white;
+      text-align: center;
+    }
+
+    .login-container input {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+
+    .login-container button {
+      background-color: #00ff00; /* Bright Green */
       color: black;
-      align-self: flex-start;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .login-container button:hover {
+      background-color: #00cc00;
+    }
+
+    /* Chat Page Styling */
+    #chat-page {
+      display: none;
+      height: 100vh;
+      background: url('https://i.ibb.co/fD1ts8p/image.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .chat-header {
+      text-align: center;
+      font-size: 1.5rem;
+      padding: 10px;
     }
 
     .chat-messages {
-      max-height: 400px;
+      flex: 1;
       overflow-y: auto;
-      margin-bottom: 10px;
+      padding: 10px;
+      margin: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+    }
+
+    .chat-footer {
+      display: flex;
+      padding: 10px;
+    }
+
+    .chat-footer input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 5px 0 0 5px;
+      border: none;
+    }
+
+    .chat-footer button {
+      padding: 10px 20px;
+      background: #00ff00;
+      color: black;
+      border: none;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+    }
+
+    .chat-footer button:hover {
+      background: #00cc00;
     }
   </style>
 </head>
 <body>
   <!-- Info Page -->
-  <div class="info-container" id="info-container">
-    <h1>Welcome to VANEA🌺💝</h1>
+  <div id="info-page">
+    <h1>Welcome to VANEA 🌺💝</h1>
     <p>Hi, I'm VANEA! I'm a developer, designer, and tech enthusiast.</p>
-    <div>
-      <a href="https://www.youtube.com/@AkewusholaAbdulbakri" target="_blank" class="btn">YouTube</a>
-      <a href="https://www.facebook.com/profile.php?id=100090443419982" target="_blank" class="btn">Facebook</a>
-      <a href="https://was.me/2348039896597" target="_blank" class="btn">WhatsApp</a>
-    </div>
-    <button class="btn" id="continue-btn">Continue</button>
+    <button id="continue-to-login">Continue</button>
   </div>
 
   <!-- Login Page -->
-  <div class="login-container" id="login-container">
-    <h2>Login to VANEA 🌺💝</h2>
-    <div class="tabs">
-      <div class="tab active" id="login-tab">Login</div>
-      <div class="tab" id="signup-tab">Sign Up</div>
+  <div id="login-page">
+    <h2>Login or Sign Up</h2>
+    <div class="login-container">
+      <input type="email" id="login-email" placeholder="Email" />
+      <input type="password" id="login-password" placeholder="Password" />
+      <button id="login-btn">Login</button>
     </div>
-    <div id="login-content">
-      <input type="email" id="email" class="input-field" placeholder="Enter your email" />
-      <input type="password" id="password" class="input-field" placeholder="Enter your password" />
-      <button class="btn" id="login-btn">Login</button>
-    </div>
-    <div id="signup-content" class="hidden">
-      <input type="email" id="newEmail" class="input-field" placeholder="Enter your email" />
-      <input type="password" id="newPassword" class="input-field" placeholder="Enter your password" />
-      <button class="btn" id="signup-btn">Sign Up</button>
+    <div class="signup-container">
+      <input type="email" id="signup-email" placeholder="New Email" />
+      <input type="password" id="signup-password" placeholder="New Password" />
+      <button id="signup-btn">Sign Up</button>
     </div>
   </div>
 
   <!-- Chat Page -->
-  <div class="chat-container" id="chat-container">
-    <h2>VANEA🌺💝</h2>
+  <div id="chat-page">
+    <div class="chat-header">Chat with VANEA 🌺💝</div>
     <div class="chat-messages" id="chat-messages"></div>
-    <div class="chat-input">
-      <input type="text" id="chat-input" placeholder="Type your message..." class="input-field"/>
-      <button class="btn" id="send-btn">Send</button>
+    <div class="chat-footer">
+      <input type="text" id="chat-input" placeholder="Type a message" />
+      <button id="send-btn">Send</button>
     </div>
   </div>
 
   <script>
-    const infoContainer = document.getElementById('info-container');
-    const continueBtn = document.getElementById('continue-btn');
-    const loginContainer = document.getElementById('login-container');
-    const chatContainer = document.getElementById('chat-container');
+    // Page Navigation
+    const infoPage = document.getElementById('info-page');
+    const loginPage = document.getElementById('login-page');
+    const chatPage = document.getElementById('chat-page');
+    const continueToLogin = document.getElementById('continue-to-login');
     const loginBtn = document.getElementById('login-btn');
     const signupBtn = document.getElementById('signup-btn');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const newEmailInput = document.getElementById('newEmail');
-    const newPasswordInput = document.getElementById('newPassword');
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
-    const loginTab = document.getElementById('login-tab');
-    const signupTab = document.getElementById('signup-tab');
-    const loginContent = document.getElementById('login-content');
-    const signupContent = document.getElementById('signup-content');
 
-    continueBtn.addEventListener('click', () => {
-      infoContainer.style.display = 'none';
-      loginContainer.style.display = 'block';
-    });
-
-    loginTab.addEventListener('click', () => {
-      loginTab.classList.add('active');
-      signupTab.classList.remove('active');
-      loginContent.style.display = 'block';
-      signupContent.style.display = 'none';
-    });
-
-    signupTab.addEventListener('click', () => {
-      signupTab.classList.add('active');
-      loginTab.classList.remove('active');
-      signupContent.style.display = 'block';
-      loginContent.style.display = 'none';
+    continueToLogin.addEventListener('click', () => {
+      infoPage.style.display = 'none';
+      loginPage.style.display = 'flex';
     });
 
     signupBtn.addEventListener('click', () => {
-      const newEmailValue = newEmailInput.value.trim();
-      const newPasswordValue = newPasswordInput.value.trim();
-      if (newEmailValue && newPasswordValue) {
-        localStorage.setItem('user', JSON.stringify({ email: newEmailValue, password: newPasswordValue }));
-        alert('Sign Up successful!');
-        loginContainer.style.display = 'none';
-        chatContainer.style.display = 'block';
-      } else {
-        alert('Please fill in all fields');
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+      if (email && password) {
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userPassword', password);
+        alert('Signup successful!');
       }
     });
 
     loginBtn.addEventListener('click', () => {
-      const emailValue = emailInput.value.trim();
-      const passwordValue = passwordInput.value.trim();
-      const storedUser = JSON.parse(localStorage.getItem('user'));
-      if (storedUser && storedUser.email === emailValue && storedUser.password === passwordValue) {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      if (
+        email === localStorage.getItem('userEmail') &&
+        password === localStorage.getItem('userPassword')
+      ) {
         alert('Login successful!');
-        loginContainer.style.display = 'none';
-        chatContainer.style.display = 'block';
+        loginPage.style.display = 'none';
+        chatPage.style.display = 'flex';
       } else {
-        alert('Invalid email or password');
+        alert('Invalid email or password!');
       }
     });
 
     sendBtn.addEventListener('click', () => {
-      const message = chatInput.value.trim();
+      const message = chatInput.value;
       if (!message) return;
       const userMessage = document.createElement('div');
-      userMessage.classList.add('message', 'user-message');
       userMessage.textContent = message;
+      userMessage.style.color = '#00ff00';
       chatMessages.appendChild(userMessage);
       chatInput.value = '';
-      const botMessage = document.createElement('div');
-      botMessage.classList.add('message', 'bot-message');
-      botMessage.textContent = "I'm here to help!";
-      chatMessages.appendChild(botMessage);
     });
   </script>
 </body>
