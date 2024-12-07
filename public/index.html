@@ -41,23 +41,23 @@
       border: 1px solid #ccc;
     }
 
-    .active {
-      display: block;
-    }
-
     .hidden {
       display: none;
     }
 
-    .info-container {
-      text-align: center;
-    }
-
-    .login-container, .chat-container {
+    .info-container, .login-container, .chat-container {
       width: 100%;
       height: 100vh;
       padding: 20px;
       box-sizing: border-box;
+    }
+
+    .info-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
 
     /* Chat Container */
@@ -71,10 +71,11 @@
       position: absolute;
       top: 0;
       left: 0;
+      display: none;
     }
 
     .chat-messages {
-      max-height: calc(100vh - 100px);
+      max-height: calc(100vh - 120px);
       overflow-y: auto;
       margin-bottom: 10px;
     }
@@ -100,44 +101,6 @@
       background-color: #ccc;
       color: black;
       align-self: flex-start;
-      position: relative;
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 50%;
-      right: 10px;
-      transform: translateY(-50%);
-      background-color: transparent;
-      border: none;
-      color: #ff4081;
-      cursor: pointer;
-    }
-
-    /* Login container */
-    .login-container {
-      width: 400px;
-      padding: 20px;
-      background-color: #fff;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      display: none;
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 20px;
-    }
-
-    .tab {
-      padding: 10px;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-    }
-
-    .tab.active {
-      border-color: #ff4081;
     }
   </style>
 </head>
@@ -155,32 +118,24 @@
   </div>
 
   <!-- Login Page -->
-  <div class="login-container" id="login-container">
+  <div class="login-container hidden" id="login-container">
     <h2>Login to VANEA 🌺💝</h2>
-    <div class="tabs">
-      <div class="tab active" id="login-tab">Login</div>
-      <div class="tab" id="signup-tab">Sign Up</div>
-    </div>
     <div id="login-content">
       <input type="email" id="email" class="input-field" placeholder="Enter your email" />
       <input type="password" id="password" class="input-field" placeholder="Enter your password" />
       <button class="btn" id="login-btn">Login</button>
     </div>
-    <div id="signup-content" class="hidden">
-      <input type="email" id="newEmail" class="input-field" placeholder="Enter your email" />
-      <input type="password" id="newPassword" class="input-field" placeholder="Enter your password" />
-      <button class="btn" id="signup-btn">Sign Up</button>
-    </div>
   </div>
 
   <!-- Chat Page -->
   <div class="chat-container" id="chat-container">
-    <h2>VANEA🌺💝</h2>
+    <h2>VANEA Chat</h2>
     <div class="chat-messages" id="chat-messages"></div>
     <div class="chat-input">
-      <input type="text" id="chat-input" placeholder="Type your message..." class="input-field"/>
+      <input type="text" id="chat-input" placeholder="Type your message..." class="input-field" />
       <button class="btn" id="send-btn">Send</button>
     </div>
+    <button class="btn" id="logout-btn" style="margin: 10px;">Logout</button>
   </div>
 
   <script>
@@ -189,59 +144,29 @@
     const loginContainer = document.getElementById('login-container');
     const chatContainer = document.getElementById('chat-container');
     const loginBtn = document.getElementById('login-btn');
-    const signupBtn = document.getElementById('signup-btn');
+    const logoutBtn = document.getElementById('logout-btn');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
-    const newEmailInput = document.getElementById('newEmail');
-    const newPasswordInput = document.getElementById('newPassword');
     const chatMessages = document.getElementById('chat-messages');
     const chatInput = document.getElementById('chat-input');
     const sendBtn = document.getElementById('send-btn');
-    const loginTab = document.getElementById('login-tab');
-    const signupTab = document.getElementById('signup-tab');
-    const loginContent = document.getElementById('login-content');
-    const signupContent = document.getElementById('signup-content');
+
+    // Dummy user credentials for simplicity
+    const user = { email: "test@example.com", password: "password" };
 
     continueBtn.addEventListener('click', () => {
-      infoContainer.style.display = 'none';
-      loginContainer.style.display = 'block';
-    });
-
-    loginTab.addEventListener('click', () => {
-      loginTab.classList.add('active');
-      signupTab.classList.remove('active');
-      loginContent.style.display = 'block';
-      signupContent.style.display = 'none';
-    });
-
-    signupTab.addEventListener('click', () => {
-      signupTab.classList.add('active');
-      loginTab.classList.remove('active');
-      signupContent.style.display = 'block';
-      loginContent.style.display = 'none';
-    });
-
-    signupBtn.addEventListener('click', () => {
-      const newEmailValue = newEmailInput.value.trim();
-      const newPasswordValue = newPasswordInput.value.trim();
-      if (newEmailValue && newPasswordValue) {
-        localStorage.setItem('user', JSON.stringify({ email: newEmailValue, password: newPasswordValue }));
-        alert('Sign Up successful!');
-        loginContainer.style.display = 'none';
-        chatContainer.style.display = 'block';
-      } else {
-        alert('Please fill in all fields');
-      }
+      infoContainer.classList.add('hidden');
+      loginContainer.classList.remove('hidden');
     });
 
     loginBtn.addEventListener('click', () => {
       const emailValue = emailInput.value.trim();
       const passwordValue = passwordInput.value.trim();
-      const storedUser = JSON.parse(localStorage.getItem('user'));
-      if (storedUser && storedUser.email === emailValue && storedUser.password === passwordValue) {
+
+      if (emailValue === user.email && passwordValue === user.password) {
         alert('Login successful!');
-        loginContainer.style.display = 'none';
-        chatContainer.style.display = 'block';
+        loginContainer.classList.add('hidden');
+        chatContainer.style.display = 'flex';
       } else {
         alert('Invalid email or password');
       }
@@ -255,51 +180,22 @@
       userMessage.classList.add('message', 'user-message');
       userMessage.textContent = message;
       chatMessages.appendChild(userMessage);
-
       chatInput.value = '';
 
-      fetch('/ask', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: message }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          const botMessage = document.createElement('div');
-          botMessage.classList.add('message', 'bot-message');
-          botMessage.textContent = data.answer;
-          chatMessages.appendChild(botMessage);
-
-          // Scroll to the bottom of the chat messages
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-        })
-        .catch(error => console.error('Error:', error));
+      // Simulate bot response
+      setTimeout(() => {
+        const botMessage = document.createElement('div');
+        botMessage.classList.add('message', 'bot-message');
+        botMessage.textContent = "Bot: " + message;
+        chatMessages.appendChild(botMessage);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 1000);
     });
 
-    chatInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        sendBtn.click();
-      }
+    logoutBtn.addEventListener('click', () => {
+      chatContainer.style.display = 'none';
+      loginContainer.classList.remove('hidden');
     });
-
-    // Balloon animation (One balloon every 60 seconds)
-    const createBalloon = () => {
-      const balloon = document.createElement('div');
-      balloon.className = 'balloon';
-      const size = Math.random() * 50 + 30;
-      balloon.style.width = `${size}px`;
-      balloon.style.height = `${size}px`;
-      balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 50%)`;
-      balloon.style.left = `${Math.random() * 100}%`;
-      balloon.style.animationDuration = `${Math.random() * 5 + 3}s`;
-      document.body.appendChild(balloon);
-
-      balloon.addEventListener('animationend', () => {
-        balloon.remove();
-      });
-    };
-
-    setInterval(createBalloon, 60000); // One balloon every 60 seconds
   </script>
 </body>
-  </html>
+</html>
