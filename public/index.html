@@ -54,6 +54,68 @@
     }
 
     .login-container, .chat-container {
+      width: 100%;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* Chat Container */
+    .chat-container {
+      background-image: url('https://i.ibb.co/jrgP4CM/image.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .chat-messages {
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+
+    .chat-input {
+      display: flex;
+      margin-top: 10px;
+    }
+
+    .message {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+    }
+
+    .user-message {
+      background-color: #ff4081;
+      color: white;
+      align-self: flex-end;
+    }
+
+    .bot-message {
+      background-color: #ccc;
+      color: black;
+      align-self: flex-start;
+      position: relative;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      background-color: transparent;
+      border: none;
+      color: #ff4081;
+      cursor: pointer;
+    }
+
+    /* Login container */
+    .login-container {
       width: 400px;
       padding: 20px;
       background-color: #fff;
@@ -76,61 +138,6 @@
 
     .tab.active {
       border-color: #ff4081;
-    }
-
-    .message {
-      padding: 10px;
-      margin: 5px;
-      border-radius: 5px;
-    }
-
-    .user-message {
-      background-color: #ff4081;
-      color: white;
-      align-self: flex-end;
-    }
-
-    .bot-message {
-      background-color: #ccc;
-      color: black;
-      align-self: flex-start;
-      position: relative;
-    }
-
-    .chat-messages {
-      max-height: 400px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 50%;
-      right: 10px;
-      transform: translateY(-50%);
-      background-color: transparent;
-      border: none;
-      color: #ff4081;
-      cursor: pointer;
-    }
-
-    /* Balloon animation */
-    .balloon {
-      position: absolute;
-      bottom: -50px;
-      border-radius: 50%;
-      animation: rise 10s ease-in infinite;
-    }
-
-    @keyframes rise {
-      0% {
-        bottom: -50px;
-        transform: scale(0.5);
-      }
-      100% {
-        bottom: 100%;
-        transform: scale(1);
-      }
     }
   </style>
 </head>
@@ -240,31 +247,15 @@
       }
     });
 
-    const addMessage = (message, isUser) => {
-      const messageDiv = document.createElement('div');
-      messageDiv.classList.add('message', isUser ? 'user-message' : 'bot-message');
-      messageDiv.textContent = message;
-
-      if (!isUser) {
-        const copyBtn = document.createElement('button');
-        copyBtn.classList.add('copy-btn');
-        copyBtn.textContent = 'Copy';
-        copyBtn.addEventListener('click', () => {
-          navigator.clipboard.writeText(message);
-          alert('Copied to clipboard!');
-        });
-        messageDiv.appendChild(copyBtn);
-      }
-
-      chatMessages.appendChild(messageDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    };
-
-    const sendMessage = () => {
+    sendBtn.addEventListener('click', () => {
       const message = chatInput.value.trim();
       if (!message) return;
 
-      addMessage(message, true);
+      const userMessage = document.createElement('div');
+      userMessage.classList.add('message', 'user-message');
+      userMessage.textContent = message;
+      chatMessages.appendChild(userMessage);
+
       chatInput.value = '';
 
       fetch('/ask', {
@@ -273,13 +264,22 @@
         body: JSON.stringify({ question: message }),
       })
         .then(response => response.json())
-        .then(data => addMessage(data.answer, false))
-        .catch(error => console.error('Error:', error));
-    };
+        .then(data => {
+          const botMessage = document.createElement('div');
+          botMessage.classList.add('message', 'bot-message');
+          botMessage.textContent = data.answer;
+          chatMessages.appendChild(botMessage);
 
-    sendBtn.addEventListener('click', sendMessage);
+          // Scroll to the bottom of the chat messages
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
     chatInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendMessage();
+      if (e.key === 'Enter') {
+        sendBtn.click();
+      }
     });
 
     // Balloon animation (One balloon every 60 seconds)
